@@ -130,8 +130,8 @@ class SentraCoreController:
             for connection in connections:
                 converted_connections.append({
                     "id": connection.id,
-                    "from_id": connection.from_,  # FrontendConnection model maps 'from' to 'from_'
-                    "to_id": connection.to
+                    "from_id": connection.from_id,  # Updated to use from_id
+                    "to_id": connection.to_id       # Updated to use to_id
                 })
             
             # Create the data

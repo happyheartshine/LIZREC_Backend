@@ -21,8 +21,8 @@ class FrontendLabel(BaseModel):
 
 class FrontendConnection(BaseModel):
     id: str
-    from_: str = Field(alias="from")
-    to: str
+    from_id: str
+    to_id: str
 
 class SaveStateRequest(BaseModel):
     name: str
