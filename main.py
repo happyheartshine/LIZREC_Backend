@@ -7,12 +7,23 @@ from database.connection import connect_to_mongo, close_mongo_connection
 import uvicorn
 import os
 from pathlib import Path
+from contextlib import asynccontextmanager
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Lifespan context manager for startup and shutdown events."""
+    # Startup
+    await connect_to_mongo()
+    yield
+    # Shutdown
+    await close_mongo_connection()
 
 # Create FastAPI app
 app = FastAPI(
     title="SentraCore API",
     description="API for managing SentraCore robot configurations",
-    version="1.0.0"
+    version="1.0.0",
+    lifespan=lifespan
 )
 
 # Add CORS middleware
@@ -39,18 +50,6 @@ if frontend_public_path.exists():
     app.mount("/favicon.ico", StaticFiles(directory=str(frontend_public_path)), name="favicon")
     app.mount("/favicon.png", StaticFiles(directory=str(frontend_public_path)), name="favicon_png")
     app.mount("/favicon.svg", StaticFiles(directory=str(frontend_public_path)), name="favicon_svg")
-
-# Startup event
-@app.on_event("startup")
-async def startup_event():
-    """Connect to MongoDB on startup."""
-    await connect_to_mongo()
-
-# Shutdown event
-@app.on_event("shutdown")
-async def shutdown_event():
-    """Close MongoDB connection on shutdown."""
-    await close_mongo_connection()
 
 # Health check endpoint
 @app.get("/api/health")
