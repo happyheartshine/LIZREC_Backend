@@ -28,12 +28,12 @@ app.add_middleware(
 app.include_router(sentra_core_router)
 
 # Mount static files from the built Next.js frontend
-frontend_static_path = Path(__file__).parent.parent / "frontend" / ".next" / "static"
+frontend_static_path = Path(__file__).parent.parent / "LIZREC" / ".next" / "static"
 if frontend_static_path.exists():
     app.mount("/_next/static", StaticFiles(directory=str(frontend_static_path)), name="static")
 
 # Mount public files from the frontend
-frontend_public_path = Path(__file__).parent.parent / "frontend" / "public"
+frontend_public_path = Path(__file__).parent.parent / "LIZREC" / "public"
 if frontend_public_path.exists():
     app.mount("/images", StaticFiles(directory=str(frontend_public_path / "images")), name="images")
     app.mount("/favicon.ico", StaticFiles(directory=str(frontend_public_path)), name="favicon")
@@ -86,7 +86,7 @@ async def serve_frontend(request: Request, full_path: str):
         return {"error": "Static asset not found"}
     
     # Path to the built Next.js frontend
-    frontend_build_path = Path(__file__).parent.parent / "frontend" / ".next" / "server" / "app"
+    frontend_build_path = Path(__file__).parent.parent / "LIZREC" / ".next" / "server" / "app"
     
     # Clean the path and remove leading slash
     clean_path = full_path.strip("/")
@@ -108,7 +108,7 @@ async def serve_frontend(request: Request, full_path: str):
         return FileResponse(str(main_page_path))
     
     # If no frontend files found, return a simple message
-    return {"message": "Frontend not built. Please run 'npm run build' in the frontend directory."}
+    return {"message": "Frontend not built. Please run 'npm run build' in the LIZREC directory."}
 
 if __name__ == "__main__":
     uvicorn.run(
